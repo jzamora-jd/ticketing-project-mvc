@@ -36,16 +36,18 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="projectname"  class="col-form-label">Project Name</label>
-                                                    <input id="projectname" th:field="*{projectName}" type="text" class="form-control" placeholder="project name">
+                                                    <label for="projectname" class="col-form-label">Project Name</label>
+                                                    <input id="projectname" th:field="*{projectName}" type="text"
+                                                           class="form-control" placeholder="project name">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="projectcode"  class="col-form-label">Project Code</label>
-                                                    <input id="projectcode" th:field="*{projectCode}" type="text" class="form-control" placeholder="project code">
+                                                    <label for="projectcode" class="col-form-label">Project Code</label>
+                                                    <input id="projectcode" th:field="*{projectCode}" type="text"
+                                                           class="form-control" placeholder="project code">
                                                 </div>
                                             </div>
                                         </div>
@@ -53,8 +55,11 @@
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label>Assigned Manager</label>
-                                                    <select name="assignedmanager" class="custom-select">
-                                                        <option></option>
+                                                    <select th:field="*{assignedManager}" class="custom-select">
+                                                        <option th:value="''" th:text="Select"></option>
+                                                        <option th:each="manager : ${managers}"
+                                                                th:value="${manager.userName}"
+                                                                th:text="${manager.firstName +' '+ manager.lastName}"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -62,29 +67,34 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="startdate" >Project Start Date</label>
-                                                    <input id="startdate" th:field="*{startDate}" type="date" class="form-control">
+                                                    <label for="startdate">Project Start Date</label>
+                                                    <input id="startdate" th:field="*{startDate}" type="date"
+                                                           class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="enddate" >Project End Date</label>
-                                                    <input id="enddate" th:field="*{endDate}" type="date" class="form-control">
+                                                    <label for="enddate">Project End Date</label>
+                                                    <input id="enddate" th:field="*{endDate}" type="date"
+                                                           class="form-control">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="projectdetail" >Project Detail</label>
-                                                    <textarea id="projectdetail" th:field="*{projectDetail}" class="form-control" placeholder="project detail"></textarea>
+                                                    <label for="projectdetail">Project Detail</label>
+                                                    <textarea id="projectdetail" th:field="*{projectDetail}"
+                                                              class="form-control"
+                                                              placeholder="project detail"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="float-right">
-                                                    <button class="btn btn-success rounded-0" type="submit">Save</button>
+                                                    <button class="btn btn-success rounded-0" type="submit">Save
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,7 +110,6 @@
                     </div>
 
                 </div>
-
 
 
                 <!-- ------------------------TABLE START----------------------------- -->
@@ -133,9 +142,18 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td>
-                                                    <a href="#"><button type="button" class="btn btn-warning rounded-0">Update</button></a>
-                                                    <a href="#"><button type="button" class="btn btn-danger rounded-0">Delete</button></a>
-                                                    <a href="#"><button type="button" class="btn btn-info rounded-0">Complete</button></a>
+                                                    <a href="#">
+                                                        <button type="button" class="btn btn-warning rounded-0">Update
+                                                        </button>
+                                                    </a>
+                                                    <a href="#">
+                                                        <button type="button" class="btn btn-danger rounded-0">Delete
+                                                        </button>
+                                                    </a>
+                                                    <a href="#">
+                                                        <button type="button" class="btn btn-info rounded-0">Complete
+                                                        </button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             </tbody>
