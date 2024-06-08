@@ -70,4 +70,9 @@ public class ProjectController {
         return "redirect:/project/create";
     }
 
+    @GetMapping("/manager/project-status")
+    public String getProjectByManager(Model model){
+        return "/manager/project-status";
+    }
+
 }
