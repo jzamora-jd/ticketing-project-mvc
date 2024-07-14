@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
+@Entity
+@Table(name = "users")
 public class User extends BaseEntity{
 
     private String firstName;
@@ -17,18 +20,12 @@ public class User extends BaseEntity{
     private String password;
     private boolean enabled;
     private String phone;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public User(Long id, LocalDateTime insertDateTime, Long insertUserId, LocalDateTime lastUpdatedDateTime, Long lastUpdateUserId, String firstName, String lastName, String email, String password, boolean enabled, String phone, Role role, Gender gender) {
-        super(id, insertDateTime, insertUserId, lastUpdatedDateTime, lastUpdateUserId);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.enabled = enabled;
-        this.phone = phone;
-        this.role = role;
-        this.gender = gender;
-    }
 }
