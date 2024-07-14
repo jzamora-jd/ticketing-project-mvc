@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationPropertiesBinding
 public class UserDtoCoverter implements Converter<String, UserDTO> {
+
     UserService userService;
     public UserDtoCoverter(UserService userService) {
         this.userService = userService;
@@ -17,7 +18,7 @@ public class UserDtoCoverter implements Converter<String, UserDTO> {
 
     @Override
     public UserDTO convert(String source) {
-        return userService.findById(source);
+        return userService.findByUserName(source);
     }
 
 
