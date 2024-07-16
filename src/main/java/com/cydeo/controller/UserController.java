@@ -29,20 +29,20 @@ public class UserController {
         return "/user/create";
     }
 
-//    @PostMapping("/create")
-//    public String insertUser(@ModelAttribute("user") UserDTO user, Model model) {
-//
-//        model.addAttribute("user", new UserDTO());
-//        model.addAttribute("roles", roleService.findAll());
-//
-//        userService.save(user);
-//
-//        model.addAttribute("users", userService.findAll());
-//
-//        return "redirect:/user/create";
-//
-//    }
-//
+    @PostMapping("/create")
+    public String insertUser(@ModelAttribute("user") UserDTO user, Model model) {
+
+        model.addAttribute("user", new UserDTO());
+        model.addAttribute("roles", roleService.listAllRoles());
+
+        userService.save(user);
+
+        model.addAttribute("users", userService.listAllUsers());
+
+        return "redirect:/user/create";
+
+    }
+
 //    @GetMapping("/update/{username}")
 //    public String editUser(@PathVariable("username") String username,Model model) {
 //
