@@ -1,10 +1,9 @@
 package com.cydeo.service.impl;
 
-import com.cydeo.Repository.RoleRepository;
 import com.cydeo.Repository.UserRepository;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.User;
-import com.cydeo.mapper.RoleMapper;
+import com.cydeo.mapper.UserMapper;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final RoleMapper roleMapper;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, RoleMapper roleMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.roleMapper = roleMapper;
+        this.userMapper = userMapper;
 
     }
 
@@ -26,8 +25,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> listAllUsers() {
 
         List<User> userList = userRepository.findAll();
-        return  userRepository.findAll().stream().map(roleMapper::convertToDto).collect(Collectors.toList());//one line code
-
+        return  userRepository.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());//one line code
     }
 
     @Override
