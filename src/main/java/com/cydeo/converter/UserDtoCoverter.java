@@ -4,6 +4,7 @@ import com.cydeo.dto.RoleDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.service.UserService;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class UserDtoCoverter implements Converter<String, UserDTO> {
 
     UserService userService;
-    public UserDtoCoverter(UserService userService) {
+    public UserDtoCoverter(@Lazy UserService userService) {
         this.userService = userService;
     }
 
