@@ -60,13 +60,13 @@ public class UserController {
 
         return "redirect:/user/create";
     }
-//
-//    @GetMapping("/delete/{username}")
-//    public String deleteUser(@PathVariable("username") String username){
-//
-//        userService.deleteById(username);
-//
-//        return "redirect:/user/create";
-//    }
+
+    @GetMapping("/delete/{username}")
+    public String deleteUser(@PathVariable("username") String username){
+
+//        userService.deleteByUserName(username);
+        userService.delete(username); //setting the isDeleted flag to true
+        return "redirect:/user/create";
+    }
 
 }
