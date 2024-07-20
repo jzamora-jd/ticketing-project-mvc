@@ -8,13 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-//    User findByUsername
-User findByUserName(String username);
+    //    User findByUsername
+    User findByUserName(String username);
 
-@Transactional
-void deleteByUserName(String username);
+    @Transactional
+    void deleteByUserName(String username);
+
     List<User> findAllByRoleDescriptionIgnoreCase(String description);
 
 }

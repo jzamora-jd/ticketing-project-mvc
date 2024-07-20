@@ -1,6 +1,5 @@
 package com.cydeo.service.impl;
 
-import com.cydeo.Repository.ProjectRepository;
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Project;
@@ -8,6 +7,8 @@ import com.cydeo.entity.User;
 import com.cydeo.enums.Status;
 import com.cydeo.mapper.ProjectMapper;
 import com.cydeo.mapper.UserMapper;
+import com.cydeo.Repository.ProjectRepository;
+import com.cydeo.repository.TaskRepository;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
@@ -75,16 +76,25 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void delete(String code) {
         Project project = projectRepository.findByProjectCode(code);
+
         project.setIsDeleted(true);
+        project.setProjectCode(project.getProjectCode() + "-" + project.getId());
+
         projectRepository.save(project);
+
+        taskService.deleteByProject(projectMapper.convertToDto(project));
 
     }
 
     @Override
     public void complete(String projectCode) {
+
         Project project = projectRepository.findByProjectCode(projectCode);
         project.setProjectStatus(Status.COMPLETE);
+
         projectRepository.save(project);
+
+        taskService.completeByProject(projectMapper.convertToDto(project));
     }
 
     @Override
@@ -110,26 +120,11 @@ public class ProjectServiceImpl implements ProjectService {
         }).collect(Collectors.toList());
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public List<ProjectDTO> readAllByAssignedManager(User assignedManager) {
+        List<Project> list = projectRepository.findAllByAssignedManager(assignedManager);
+        return list.stream().map(projectMapper::convertToDto).collect(Collectors.toList());
+    }
 
 
 }

@@ -1,10 +1,17 @@
 package com.cydeo.service.impl;
 
-import com.cydeo.Repository.UserRepository;
+import com.cydeo.dto.ProjectDTO;
+import com.cydeo.dto.TaskDTO;
 import com.cydeo.dto.UserDTO;
+import com.cydeo.entity.Project;
+import com.cydeo.entity.Task;
 import com.cydeo.entity.User;
 import com.cydeo.mapper.UserMapper;
+import com.cydeo.Repository.UserRepository;
+import com.cydeo.service.ProjectService;
+import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,40 +21,50 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ProjectService projectService;
+    private final TaskService taskService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, @Lazy ProjectService projectService, TaskService taskService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-
+        this.projectService = projectService;
+        this.taskService = taskService;
     }
 
     @Override
     public List<UserDTO> listAllUsers() {
 
         List<User> userList = userRepository.findAll(Sort.by("firstName"));
-        return  userRepository.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());//one line code
+        return userList.stream().map(userMapper::convertToDTO).collect(Collectors.toList());
+
     }
 
     @Override
     public UserDTO findByUserName(String username) {
         User user = userRepository.findByUserName(username);
-        return userMapper.convertToDto(user);
+        return userMapper.convertToDTO(user);
     }
 
     @Override
     public void save(UserDTO dto) {
+
         userRepository.save(userMapper.convertToEntity(dto));
     }
 
     @Override
     public UserDTO update(UserDTO dto) {
 
-        User user = userRepository.findByUserName(dto.getUserName()); //find user first
-        User convertedUser = userMapper.convertToEntity(dto); //Map updated user dto to entity object
-        convertedUser.setId(user.getId()); //set id to converted user
-        userRepository.save(convertedUser); //save updated user
+        //Find current user
+        User user = userRepository.findByUserName(dto.getUserName());
+        //Map updated user dto to entity object
+        User convertedUser = userMapper.convertToEntity(dto);
+        //set id to converted object
+        convertedUser.setId(user.getId());
+        //save updated user
+        userRepository.save(convertedUser);
 
         return findByUserName(dto.getUserName());
     }
@@ -55,13 +72,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteByUserName(String username) {
         userRepository.deleteByUserName(username);
+
     }
 
     @Override
-    public void delete(String username) {//not deleting from db changing isDeleted to true.
+    public void delete(String username) {
         User user = userRepository.findByUserName(username);
-        user.setIsDeleted(true);
-        userRepository.save(user);
+
+        if (checkIfUserCanBeDeleted(user)) {
+            user.setIsDeleted(true);
+            user.setUserName(user.getUserName() + "-" + user.getId());
+            userRepository.save(user);
+        }
+
+    }
+
+    private boolean checkIfUserCanBeDeleted(User user) {
+
+        switch (user.getRole().getDescription()) {
+            case "Manager":
+                List<ProjectDTO> projectDTOList = projectService.readAllByAssignedManager(user);
+                return projectDTOList.size() == 0;
+            case "Employee":
+                List<TaskDTO> taskDTOList = taskService.readAllByAssignedEmployee(user);
+                return taskDTOList.size() == 0;
+            default:
+                return true;
+        }
+
     }
 
     @Override
@@ -69,7 +107,6 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = userRepository.findAllByRoleDescriptionIgnoreCase(role);
 
-        return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
+        return users.stream().map(userMapper::convertToDTO).collect(Collectors.toList());
     }
-
 }
